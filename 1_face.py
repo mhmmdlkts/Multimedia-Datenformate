@@ -5,7 +5,9 @@ import cv2
 # Load the cascade
 face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
 # Read the input image
-img = imread('faces.avif')
+
+#img = imread('faces.avif')
+img = imread('faces.jpeg')
 
 img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
 
