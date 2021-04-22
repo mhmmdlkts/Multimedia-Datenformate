@@ -2,9 +2,10 @@ from PIL import Image
 import os, sys
 import cv2
 import numpy as np
+import imageio
 # from cykooz.heif.pil import register_heif_opener
 
-format = "JPG" # AVIF | JXR | JPEG2000 | JPG  | Original
+format = "JXR" # AVIF | JXR | JPEG2000 | JPG  | Original
 # Path to image directory
 path = "Bilder/Training/" + format + "/"
 dirs = os.listdir( path )
@@ -30,7 +31,11 @@ def load_dataset():
             if os.path.isfile(itemPath):
 
                 # register_heif_opener()
-                im = Image.open(itemPath).convert('L')
+                if format == "JXR":
+                    print(itemPath)
+                    im = imageio.imread(itemPath, format='JPEG-XR')
+                else:
+                    im = Image.open(itemPath).convert('L')
                 
                 im = np.array(im)
                 x_train.append(im)
