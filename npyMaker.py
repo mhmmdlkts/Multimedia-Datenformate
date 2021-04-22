@@ -30,22 +30,12 @@ def load_dataset():
             if os.path.isfile(itemPath):
 
                 # register_heif_opener()
-                im = Image.open(itemPath)
-                
-                left = 14
-                top = 24
-                right = 78
-                bottom = 88
-                
-                im = im.crop((left, top, right, bottom))
+                im = Image.open(itemPath).convert('L')
                 
                 im = np.array(im)
                 x_train.append(im)
-                x_train.append(im)
                 counter = counter + 1
-                counter = counter + 1
-                if counter == 400:
-                    return
+                print(counter)
                 if not targetAdded:
                     print (itemPath)
                     x_target.append(im)
