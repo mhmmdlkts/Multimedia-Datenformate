@@ -62,8 +62,6 @@ import os
 #
 
 
-
-
 data=np.load("imgds_JPG.npy")
 print (data.shape)
 target=np.load("olivetti_faces_target.npy")
