@@ -15,17 +15,18 @@ def runBash(command):
 def copyFile(origin, destination, image):
     runBash("cp " + origin + " " + destination + image)
 
-def getFilePath(extension_folder, rate, folder_number, image, isInput):
+def getFilePath(extension_folder, rate_folder, folder_number, image, isInput):
     if isInput:
-        folder = "1-" + str(rate)
+        folder = rate_folder
     else:
         folder = OUTPUT_FOLDER_NAME
         
     file_path = TRAIN_FOLDER + "/" + folder + "/" + extension_folder + "/s" + str(folder_number) + "/" + image
+
     return file_path
     
-def getFileSize(extension_folder, extension, rate, folder_number, image):
-    file_name = getFilePath(extension_folder, rate, folder_number, image, True)
+def getFileSize(extension_folder, extension, rate_folder, folder_number, image):
+    file_name = getFilePath(extension_folder, rate_folder, folder_number, image, True)
     file_stats = os.stat(file_name)
     return file_stats.st_size
     
@@ -33,23 +34,25 @@ def initFolder(extension):
     runBash("rm -r " + TRAIN_FOLDER + "/" + OUTPUT_FOLDER_NAME)
     runBash("mkdir " + TRAIN_FOLDER + "/" + OUTPUT_FOLDER_NAME)
     runBash("mkdir " + TRAIN_FOLDER + "/" + OUTPUT_FOLDER_NAME + "/" + extension)
-    for s_folder in range(1, MAX_FOLDER_NUMBER):
-        file_path = getFilePath(extension_folder, None, s_folder, "", False)
+    for s_folder in range(1, MAX_FOLDER_NUMBER + 1):
+        file_path = getFilePath(extension_folder, None, str(s_folder), "", False)
         runBash("mkdir " + file_path)
         
 def doIt(size, extension, extension_folder, folder_number, image_number):
 
     image = str(image_number) + "." + extension
-    nearest_rate = 0
+    nearest_rate = "0"
     nearest_size_diff = sys.maxsize
     
-    for i in range(1, 11):
-        file_size = getFileSize(extension_folder, extension, i, folder_number, image)
-        file_size_diff = abs(file_size - size)
-        
-        if file_size_diff < nearest_size_diff:
-            nearest_rate = i
-            nearest_size_diff = file_size_diff
+    
+    for name in os.listdir(TRAIN_FOLDER):
+        if name != "training" and name != ".DS_Store" and name != "Output":
+            file_size = getFileSize(extension_folder, extension, name, folder_number, image)
+            file_size_diff = abs(file_size - size)
+            
+            if file_size_diff < nearest_size_diff:
+                nearest_rate = name
+                nearest_size_diff = file_size_diff
                         
     best_path = getFilePath(extension_folder, nearest_rate, folder_number, image, True)
     output_path = getFilePath(extension_folder, nearest_rate, folder_number, "", False)
