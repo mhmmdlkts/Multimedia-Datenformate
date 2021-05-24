@@ -2,16 +2,16 @@ from PIL import Image
 import os, sys
 import cv2
 import numpy as np
-import imageio
+
 # from cykooz.heif.pil import register_heif_opener
 
-format = "JXR" # AVIF | JXR | JPEG2000 | JPG  | Original
+format = "test"  # AVIF | JXR | JPEG2000 | JPG  | Original
 # Path to image directory
-path = "Bilder/Training/" + format + "/"
-dirs = os.listdir( path )
+path = "Bilder2.0/1-40/" + format + "/"
+dirs = os.listdir(path)
 dirs.sort()
-x_train=[]
-x_target=[]
+x_train = []
+x_target = []
 
 
 def load_dataset():
@@ -20,8 +20,8 @@ def load_dataset():
     for subDirName in dirs:
         if subDirName == ".DS_Store":
             continue
-        subDirPath = path+subDirName+"/"
-        subDirs = os.listdir( subDirPath )
+        subDirPath = path + subDirName + "/"
+        subDirs = os.listdir(subDirPath)
         subDirs.sort()
         targetAdded = False
         for item in subDirs:
@@ -31,32 +31,30 @@ def load_dataset():
             if os.path.isfile(itemPath):
 
                 # register_heif_opener()
-                if format == "JXR":
-                    print(itemPath)
-                    im = imageio.imread(itemPath, format='JPEG-XR')
-                else:
-                    im = Image.open(itemPath).convert('L')
-                
+                im = Image.open(itemPath)
+
                 im = np.array(im)
                 x_train.append(im)
+                x_train.append(im)
                 counter = counter + 1
-                print(counter)
+                counter = counter + 1
+                if counter == 400:
+                    return
                 if not targetAdded:
-                    print (itemPath)
+                    print(itemPath)
                     x_target.append(im)
                     targetAdded = True
-                    
-if __name__ == "__main__" :
-    
-    load_dataset()
-    
-    # Convert and save the list of images in '.npy' format
-    imgset=np.array(x_train)
-    np.save("imgds_" + format +  ".npy",imgset)
-    imgset=np.array(x_target)
-    np.save("target_" + format +  ".npy",imgset)
-    
-    
-data=np.load("imgds_JPG.npy")
 
-print (data.shape)
+
+if __name__ == "__main__":
+    load_dataset()
+
+    # Convert and save the list of images in '.npy' format
+    imgset = np.array(x_train)
+    np.save("imgds_" + format + ".npy", imgset)
+    imgset = np.array(x_target)
+    np.save("target_" + format + ".npy", imgset)
+
+data = np.load("imgds_test.npy")
+
+print(data.shape)

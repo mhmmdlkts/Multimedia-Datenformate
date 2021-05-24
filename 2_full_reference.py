@@ -1,12 +1,21 @@
-import pillow_avif
+from SSIM_PIL import compare_ssim
+from PIL import Image
 
-from matplotlib.image import imread
 
-from sewar.full_ref import uqi, mse, psnr, ssim
-# X: (N,3,H,W) a batch of non-negative RGB images (0~255)
-# Y: (N,3,H,W)
 
-img1 = imread("kimono.avif")
-img2 = imread("kimono.avif", 1)
-val = uqi(img1,img2)
-print(val)
+image1 = Image.open("Bilder2.0/1-1/JPEG/s1/1.jpg")
+image2 = Image.open("Bilder2.0/1-1/JPEG/s1/2.jpg")
+
+value = compare_ssim(image1, image2) # Compare images using OpenCL by default
+print(value)
+
+value = compare_ssim(image1, image2, GPU=False) #  Compare images using CPU-only version
+print(value)
+
+import numpy as np
+def calculate_psnr(img1, img2, max_value=255):
+    """"Calculating peak signal-to-noise ratio (PSNR) between two images."""
+    mse = np.mean((np.array(img1, dtype=np.float32) - np.array(img2, dtype=np.float32)) ** 2)
+    if mse == 0:
+        return 100
+    return 20 * np.log10(max_value / (np.sqrt(mse)))

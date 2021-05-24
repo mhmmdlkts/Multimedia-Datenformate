@@ -18,7 +18,7 @@ from sklearn import metrics
 #System
 import os
 
-data=np.load("imgds_JPG.npy")
+data=np.load("imgds_DeepL.npy")
 target=np.load("Original/olivetti_faces_target.npy")
 
 print("There are {} images in the dataset".format(len(data)))
@@ -47,7 +47,7 @@ def show_40_distinct_people(images, unique_ids):
 show_40_distinct_people(data, np.unique(target))
 
 # We reshape images for machine learnig  model
-X = data.reshape((data.shape[0], data.shape[1] * data.shape[2]))
+X = data.reshape((data.shape[0], data.shape[1] * data.shape[2]*3))
 print("X shape:", X.shape)
 
 X_train, X_test, y_train, y_test=train_test_split(X, target, test_size=0.3, stratify=target, random_state=0)
@@ -101,13 +101,13 @@ pca=PCA(n_components=n_components, whiten=True)
 pca.fit(X_train)
 
 fig,ax=plt.subplots(1,1,figsize=(8,8))
-ax.imshow(pca.mean_.reshape((64,64)), cmap="gray")
+ax.imshow(pca.mean_.reshape((112,92,3)), cmap="gray")
 ax.set_xticks([])
 ax.set_yticks([])
 ax.set_title('Average Face')
 
 number_of_eigenfaces=len(pca.components_)
-eigen_faces=pca.components_.reshape((number_of_eigenfaces, data.shape[1], data.shape[2]))
+eigen_faces=pca.components_.reshape((number_of_eigenfaces, data.shape[1], data.shape[2],3))
 
 cols=10
 rows=int(number_of_eigenfaces/cols)
