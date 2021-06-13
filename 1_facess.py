@@ -18,7 +18,7 @@ from sklearn import metrics
 #System
 import os
 
-data=np.load("imgds_DeepL.npy")
+data=np.load("imgds_JPEGXRPNG.npy")
 target=np.load("Original/olivetti_faces_target.npy")
 
 print("There are {} images in the dataset".format(len(data)))
@@ -47,7 +47,7 @@ def show_40_distinct_people(images, unique_ids):
 show_40_distinct_people(data, np.unique(target))
 
 # We reshape images for machine learnig  model
-X = data.reshape((data.shape[0], data.shape[1] * data.shape[2]*3))
+X = data.reshape((data.shape[0], data.shape[1] * data.shape[2]))
 print("X shape:", X.shape)
 
 X_train, X_test, y_train, y_test=train_test_split(X, target, test_size=0.3, stratify=target, random_state=0)
@@ -57,6 +57,111 @@ print("y_train shape:{}".format(y_train.shape))
 y_frame=pd.DataFrame()
 y_frame['subject ids']=y_train
 y_frame.groupby(['subject ids']).size().plot.bar(figsize=(15,8),title="Number of Samples for Each Classes")
+
+
+def show_40_distinct_people(images, unique_ids):
+    # Creating 4X10 subplots in  18x9 figure size
+    fig, axarr = plt.subplots(nrows=4, ncols=10, figsize=(18, 9))
+    # For easy iteration flattened 4X10 subplots matrix to 40 array
+    axarr = axarr.flatten()
+
+    # iterating over user ids
+    for unique_id in unique_ids:
+        image_index = unique_id * 10
+        axarr[unique_id].imshow(images[image_index], cmap='gray')
+        axarr[unique_id].set_xticks([])
+        axarr[unique_id].set_yticks([])
+        axarr[unique_id].set_title("face id:{}".format(unique_id))
+    plt.suptitle("There are 40 distinct people in the dataset")
+
+show_40_distinct_people(data, np.unique(target))
+
+# We reshape images for machine learnig  model
+X = data.reshape((data.shape[0], data.shape[1] * data.shape[2]))
+print("X shape:", X.shape)
+
+X_train, X_test, y_train, y_test=train_test_split(X, target, test_size=0.3, stratify=target, random_state=0)
+print("X_train shape:",X_train.shape)
+print("y_train shape:{}".format(y_train.shape))
+
+y_frame=pd.DataFrame()
+y_frame['subject ids']=y_train
+y_frame.groupby(['subject ids']).size().plot.bar(figsize=(15,8),title="Number of Samples for Each Classes")
+
+##############################################################################################################
+
+print("#################################################")
+data=np.load("imgds_training.npy")
+target=np.load("Original/olivetti_faces_target.npy")
+
+print("There are {} images in the dataset".format(len(data)))
+print("There are {} unique targets in the dataset".format(len(np.unique(target))))
+print("Size of each image is {}x{}".format(data.shape[1],data.shape[2]))
+print("Pixel values were scaled to [0,1] interval. e.g:{}".format(data[0][0,:4]))
+
+print("unique target number:",np.unique(target))
+
+
+def show_40_distinct_people(images, unique_ids):
+    # Creating 4X10 subplots in  18x9 figure size
+    fig, axarr = plt.subplots(nrows=4, ncols=10, figsize=(18, 9))
+    # For easy iteration flattened 4X10 subplots matrix to 40 array
+    axarr = axarr.flatten()
+
+    # iterating over user ids
+    for unique_id in unique_ids:
+        image_index = unique_id * 10
+        axarr[unique_id].imshow(images[image_index], cmap='gray')
+        axarr[unique_id].set_xticks([])
+        axarr[unique_id].set_yticks([])
+        axarr[unique_id].set_title("face id:{}".format(unique_id))
+    plt.suptitle("There are 40 distinct people in the dataset")
+
+show_40_distinct_people(data, np.unique(target))
+
+# We reshape images for machine learnig  model
+X = data.reshape((data.shape[0], data.shape[1] * data.shape[2]))
+print("X shape:", X.shape)
+
+X_train, X_test, y_train, y_test=train_test_split(X, target, test_size=0.3, stratify=target, random_state=0)
+print("X_train shape:",X_train.shape)
+print("y_train shape:{}".format(y_train.shape))
+
+y_frame=pd.DataFrame()
+y_frame['subject ids']=y_train
+y_frame.groupby(['subject ids']).size().plot.bar(figsize=(15,8),title="Number of Samples for Each Classes")
+
+
+def show_40_distinct_people(images, unique_ids):
+    # Creating 4X10 subplots in  18x9 figure size
+    fig, axarr = plt.subplots(nrows=4, ncols=10, figsize=(18, 9))
+    # For easy iteration flattened 4X10 subplots matrix to 40 array
+    axarr = axarr.flatten()
+
+    # iterating over user ids
+    for unique_id in unique_ids:
+        image_index = unique_id * 10
+        axarr[unique_id].imshow(images[image_index], cmap='gray')
+        axarr[unique_id].set_xticks([])
+        axarr[unique_id].set_yticks([])
+        axarr[unique_id].set_title("face id:{}".format(unique_id))
+    plt.suptitle("There are 40 distinct people in the dataset")
+
+show_40_distinct_people(data, np.unique(target))
+
+# We reshape images for machine learnig  model
+X = data.reshape((data.shape[0], data.shape[1] * data.shape[2]))
+print("X shape:", X.shape)
+
+X_train, X_test2, y_train, y_test2=train_test_split(X, target, test_size=0.3, stratify=target, random_state=0)
+print("X_train shape:",X_train.shape)
+print("y_train shape:{}".format(y_train.shape))
+
+y_frame=pd.DataFrame()
+y_frame['subject ids']=y_train
+y_frame.groupby(['subject ids']).size().plot.bar(figsize=(15,8),title="Number of Samples for Each Classes")
+
+##############################################################################################################
 
 import mglearn
 
@@ -101,13 +206,13 @@ pca=PCA(n_components=n_components, whiten=True)
 pca.fit(X_train)
 
 fig,ax=plt.subplots(1,1,figsize=(8,8))
-ax.imshow(pca.mean_.reshape((112,92,3)), cmap="gray")
+ax.imshow(pca.mean_.reshape((112,92)), cmap="gray")
 ax.set_xticks([])
 ax.set_yticks([])
 ax.set_title('Average Face')
 
 number_of_eigenfaces=len(pca.components_)
-eigen_faces=pca.components_.reshape((number_of_eigenfaces, data.shape[1], data.shape[2],3))
+eigen_faces=pca.components_.reshape((number_of_eigenfaces, data.shape[1], data.shape[2]))
 
 cols=10
 rows=int(number_of_eigenfaces/cols)

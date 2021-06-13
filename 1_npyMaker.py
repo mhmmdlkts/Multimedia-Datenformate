@@ -5,9 +5,9 @@ import numpy as np
 
 # from cykooz.heif.pil import register_heif_opener
 
-format = "test"  # AVIF | JXR | JPEG2000 | JPG  | Original
+format = "DEEPL"  # AVIF | JXR | JPEG2000 | JPG  | Original
 # Path to image directory
-path = "Bilder2.0/1-40/" + format + "/"
+path = "Bilder2.0/1-10/" + format + "/"
 dirs = os.listdir(path)
 dirs.sort()
 x_train = []
@@ -55,6 +55,6 @@ if __name__ == "__main__":
     imgset = np.array(x_target)
     np.save("target_" + format + ".npy", imgset)
 
-data = np.load("imgds_test.npy")
+data = np.load("imgds_DeepL.npy")
 
 print(data.shape)
